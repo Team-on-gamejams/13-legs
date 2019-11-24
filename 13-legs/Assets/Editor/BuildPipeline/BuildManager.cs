@@ -15,7 +15,7 @@ using Debug = UnityEngine.Debug;
 //TODO: publish to itch.io via butler
 public static class BuildManager {
 	//TODO: move to settings that can be changed in editor;
-	const string butlerRelativePath = @"Thirdparty/Editor/butler/butler.exe";
+	const string butlerRelativePath = @"Editor/butler/butler.exe";
 	static string[] channelNames = new string[] {
 		"windows-32",
 		"windows-64",
