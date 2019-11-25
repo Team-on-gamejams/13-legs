@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+	public Action OnLose;
+
 	[Header("HP")]
 	[SerializeField] float hpMax;
-	[SerializeField] float hpCurr;
+	float hpCurr;
 	[SerializeField] float hpLoss;
 	[SerializeField] float hpLossTime;
 	[SerializeField] Transform hpCircle;
@@ -59,9 +62,28 @@ public class Player : MonoBehaviour {
 
 	public void StartGame() {
 		isPlaying = true;
+		hpCurr = hpMax;
+		hpCircle.localScale = Vector3.one;
 	}
 
 	public void Lose() {
 		isPlaying = false;
+		OnLose.Invoke();
+		StartCoroutine(FillCoroutine());
+	}
+
+	IEnumerator FillCoroutine() {
+		while (true) {
+			hpCurr += 1.0f;
+			if(hpCurr > hpMax) 
+				hpCurr = hpMax;
+
+			hpCircle.localScale = Vector3.one * (hpCurr / hpMax);
+
+			if (hpCurr == hpMax)
+				break;
+
+			yield return null;
+		}
 	}
 }
