@@ -17,22 +17,30 @@ public class LegController : MonoBehaviour {
 			Leg leg = null;
 			bool findEmpty = false;
 
-			foreach (var i in legs) {
-				if(i.target == null) {
-					leg = i;
+			byte minAngle = 0;
+			float angle = float.MaxValue;
+
+			for (byte i = 0; i < legs.Count; ++i) {
+				if (legs[i].target == null && legs[i].GetAngleTo(collision.transform.position) < angle) {
+					minAngle = i;
+					angle = legs[minAngle].GetAngleTo(collision.transform.position);
 					findEmpty = true;
-					break;
 				}
 			}
 
 			if (!findEmpty) {
-				byte maxTimer = 0;
-				for(byte i = 1; i < legs.Count; ++i) 
-					if(legs[i].timer > legs[maxTimer].timer) 
-						maxTimer = i;
-				leg = legs[maxTimer];
+				minAngle = 0;
+				angle = legs[minAngle].GetAngleTo(collision.transform.position);
+
+				for(byte i = 1; i < legs.Count; ++i) {
+					if(legs[i].GetAngleTo(collision.transform.position) < angle) {
+						minAngle = i;
+						angle = legs[minAngle].GetAngleTo(collision.transform.position);
+					}
+				}
 			}
 
+			leg = legs[minAngle];
 			leg.SetNewTarget(collision.gameObject);
 		}
 	}

@@ -9,7 +9,12 @@ public class Leg : MonoBehaviour {
 
 	[SerializeField] float magnitudeForOrigin = 3.5f;
 
+	[SerializeField] float rotationSpeed = 5.0f;
+	[SerializeField] float scaleSpeed = 1.0f;
+
 	[SerializeField] SpriteRenderer sr;
+
+	Vector3 prevPos = Vector3.zero;
 
 	void Update() {
 		if (target) {
@@ -18,19 +23,32 @@ public class Leg : MonoBehaviour {
 			Vector3 vectorToTarget = target.transform.position - transform.position;
 			float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg - 90;
 			Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-			transform.rotation = q;
+			transform.rotation = Quaternion.Lerp(transform.rotation, q, rotationSpeed * Time.deltaTime);
 
-			sr.transform.localScale = new Vector3(1.0f, vectorToTarget.magnitude / magnitudeForOrigin, 1.0f);
+			sr.transform.localScale = Vector3.Lerp(sr.transform.localScale, new Vector3(1.0f, vectorToTarget.magnitude / magnitudeForOrigin, 1.0f), scaleSpeed * Time.deltaTime);
 
 		}
 		else {
-			gameObject.SetActive(false);
+			sr.transform.localScale = Vector3.Lerp(sr.transform.localScale, new Vector3(1.0f, 0.65f, 1.0f), scaleSpeed * Time.deltaTime);
+
+			//if(prevPos != transform.position && prevPos != Vector3.zero) {
+			//	Vector3 vectorToTarget = prevPos - transform.position;
+			//	float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg - 90;
+			//	Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+			//	transform.rotation = Quaternion.Lerp(transform.rotation, q, rotationSpeed * Time.deltaTime);
+			//}
 		}
+
+		prevPos = transform.position;
+	}
+
+	public float GetAngleTo(Vector3 targetPos) {
+		Vector3 vectorToTarget = targetPos - transform.position;
+		return Mathf.Abs(Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg - 90 - transform.rotation.eulerAngles.z);
 	}
 
 	public void SetNewTarget(GameObject _target) {
 		target = _target;
 		timer = 0;
-		gameObject.SetActive(true);
 	}
 }
