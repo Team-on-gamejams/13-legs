@@ -1,6 +1,6 @@
 # 13-legs
 Trijam # 46: The 3 hour game jam      https://itch.io/jam/trijam-46  
-Typing game with hentai manga/anime covers.
+Run&Eat&Survive
 
 ![Cover](Screenshots/Cover1.jpg)
 
