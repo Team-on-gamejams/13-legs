@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player : MonoBehaviour {
 	public Action OnLose;
@@ -16,18 +17,26 @@ public class Player : MonoBehaviour {
 	[Header("Moving")]
 	[SerializeField] float moveForce;
 
+	[Header("Score")]
+	public TextMeshProUGUI scoreText;
+
 	[Header("Refs")]
 	[SerializeField] Rigidbody2D rb;
 
 	Vector3 moveVect;
-	float currHpLoseTimer = 0;
+	float currHpLoseTimer;
 	bool isPlaying;
+
+	float currScore;
 
 	void Update() {
 		if (!isPlaying)
 			return;
 
 		moveVect = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+
+		currScore += Time.deltaTime;
+		scoreText.text = currScore.ToString("0.00");
 
 		currHpLoseTimer += Time.deltaTime;
 		while (currHpLoseTimer >= hpLossTime) {
@@ -62,14 +71,24 @@ public class Player : MonoBehaviour {
 
 	public void StartGame() {
 		isPlaying = true;
+		currHpLoseTimer = 0;
+		currScore = 0;
 		hpCurr = hpMax;
+
+		StopAllCoroutines();
 		hpCircle.localScale = Vector3.one;
 	}
 
 	public void Lose() {
 		isPlaying = false;
-		OnLose.Invoke();
 		StartCoroutine(FillCoroutine());
+
+		PlayerPrefs.SetFloat("CurrScore", currScore);
+		OnLose.Invoke();
+		
+		float maxScore = PlayerPrefs.GetFloat("MaxScore", 0.0f);
+		if (currScore > maxScore)
+			PlayerPrefs.SetFloat("MaxScore", currScore);
 	}
 
 	IEnumerator FillCoroutine() {
