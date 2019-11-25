@@ -60,7 +60,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collision) {
-		if(collision.tag == "Food") {
+		if (collision.tag == "Food") {
 			Food food = collision.GetComponent<Food>();
 			if((hpCurr += food.hpRegen) > hpMax) 
 				hpCurr = hpMax;
