@@ -13,7 +13,7 @@ public class LegController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.tag == "Food") {
+		if (collision.tag == "Food" || collision.tag == "LegPlace") {
 			Leg leg = null;
 			bool findEmpty = false;
 
@@ -21,7 +21,7 @@ public class LegController : MonoBehaviour {
 			float angle = float.MaxValue;
 
 			for (byte i = 0; i < legs.Count; ++i) {
-				if (legs[i].target == null && legs[i].GetAngleTo(collision.transform.position) < angle) {
+				if ((legs[i].target == null) && legs[i].GetAngleTo(collision.transform.position) < angle) {
 					minAngle = i;
 					angle = legs[minAngle].GetAngleTo(collision.transform.position);
 					findEmpty = true;
@@ -46,7 +46,7 @@ public class LegController : MonoBehaviour {
 	}
 
 	void OnTriggerExit2D(Collider2D collision) {
-		if (collision.tag == "Food") {
+		if (collision.tag == "Food" || collision.tag == "LegPlace") {
 			foreach (var leg in legs) {
 				if (leg.target == collision.gameObject) {
 					leg.SetNewTarget(null);

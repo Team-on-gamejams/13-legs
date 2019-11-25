@@ -50,5 +50,10 @@ public class Leg : MonoBehaviour {
 	public void SetNewTarget(GameObject _target) {
 		target = _target;
 		timer = 0;
+
+		if (_target != null && _target.GetComponent<Food>() != null)
+			sr.color = Color.red;
+		else
+			sr.color = Color.white;
 	}
 }
