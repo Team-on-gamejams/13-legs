@@ -25,6 +25,16 @@ public abstract class MenuBase : MonoBehaviour {
 		OnExit();
 	}
 
+	public void ShowForce() {
+		canvasGroup.interactable = canvasGroup.blocksRaycasts = true;
+		canvasGroup.alpha = 1.0f;
+	}
+
+	public void HideForce() {
+		canvasGroup.interactable = canvasGroup.blocksRaycasts = false;
+		canvasGroup.alpha = 0.0f;
+	}
+
 	protected virtual void OnEnter() { }
 	protected virtual void OnExit() { }
 }

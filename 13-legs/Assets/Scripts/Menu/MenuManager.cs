@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour {
 
 		foreach (var menu in Menus) {
 			if (menu != currMenu.Peek())
-				menu.Hide();
+				menu.HideForce();
 			else
 				menu.Show();
 

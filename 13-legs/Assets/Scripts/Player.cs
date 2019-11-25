@@ -20,10 +20,6 @@ public class Player : MonoBehaviour {
 	float currHpLoseTimer = 0;
 	bool isPlaying;
 
-	void Start() {
-		StartGame();
-	}
-
 	void Update() {
 		if (!isPlaying)
 			return;
